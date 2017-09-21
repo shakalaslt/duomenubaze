@@ -18,7 +18,7 @@ if (!$conn) {
 } 
 mysqli_set_charset($conn,"utf8");
 
-if ($_POST['submit']){
+if (isset($_POST['submit'])){
     $sql= "INSERT INTO products (pavadinimas, kaina, aprašymas, svoris, kiekis) VALUES ('".$_POST['pavadinimas']."','". $_POST['kaina']."','". $_POST['aprašymas']."','". $_POST['svoris']."','". $_POST['kiekis']."')";
 
  mysqli_query($conn, $sql);
@@ -29,14 +29,22 @@ if ($_POST['submit']){
 $sql = "SELECT * FROM products ORDER BY id";
  
 $result = mysqli_query($conn, $sql);
+$products = [];
+if (mysqli_num_rows($result) > 0) {
+	while($row = mysqli_fetch_assoc($result)) {
+		array_push($products, $row);
+}
+} else {
+	$err = "Patiekalų nerasta";
+}
 
 
 
-if(isset$_GET['delete'])){
+if(isset($_GET['delete'])){
     $sql = "DELETE FROM products WHERE id = ".$_GET['delete'];
     mysqli_query($conn, $sql);
 
-
+}
 mysqli_close($conn);
 
 
